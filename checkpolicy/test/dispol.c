@@ -477,11 +477,16 @@ static int filenametr_display(hashtab_key_t key,
 
 	do {
 		ebitmap_for_each_positive_bit(&ftdatum->stypes, node, bit) {
+			fprintf(fp, "type_transition");
 			display_id(p, fp, SYM_TYPES, bit, "");
 			display_id(p, fp, SYM_TYPES, ft->ttype - 1, "");
 			display_id(p, fp, SYM_CLASSES, ft->tclass - 1, ":");
 			display_id(p, fp, SYM_TYPES, ftdatum->otype - 1, "");
-			fprintf(fp, " %s\n", ft->name);
+			if (ft->name[0] == '[') {
+				fprintf(fp, " \"%s\";\n", ft->name);
+			} else {
+				fprintf(fp, " %s;\n", ft->name);
+			}
 		}
 		ftdatum = ftdatum->next;
 	} while (ftdatum);
