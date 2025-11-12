@@ -57,6 +57,7 @@ static const struct command {
 	{CMD,       'C',  "display classes"},
 	{CMD,       'u',  "display users"},
 	{CMD,       'r',  "display roles"},
+	{CMD,       'A',  "display types with attributes"},
 	{CMD,       't',  "display types"},
 	{CMD,       'a',  "display type attributes"},
 	{CMD,       'p',  "display the list of permissive types"},
@@ -427,6 +428,37 @@ static int display_types(policydb_t * p, FILE *fp)
 	return 0;
 }
 
+static int display_types_with_attributes(policydb_t * p, FILE *fp)
+{
+	uint32_t i;
+
+	for (i = 0; i < p->p_types.nprim; i++) {
+		if (!p->p_type_val_to_name[i])
+			continue;
+
+		if (p->type_val_to_struct[i]->flavor == TYPE_ATTRIB) {
+			fprintf(fp, "attribute %s;\n", p->p_type_val_to_name[i]);
+			continue;
+		}
+
+		fprintf(fp, "type %s;\n", p->p_type_val_to_name[i]);
+
+		struct ebitmap_node *ebm_node;
+		uint32_t bit;
+		ebitmap_for_each_positive_bit(&p->type_attr_map[i], ebm_node, bit) {
+			if (bit == i) {
+				continue;
+			}
+			if (p->type_val_to_struct[bit]->flavor != TYPE_ATTRIB) {
+				fprintf(fp, "\tunexpected flavor %i\n", p->type_val_to_struct[bit]->flavor);
+				abort();
+			}
+			fprintf(fp, "typeattribute %s %s;\n", p->p_type_val_to_name[i], p->p_type_val_to_name[bit]);
+		}
+	}
+	return 0;
+}
+
 static int display_attributes(policydb_t * p, FILE *fp)
 {
 	uint32_t i;
@@ -681,6 +713,9 @@ int main(int argc, char **argv)
 			break;
 		case 't':
 			display_types(&policydb, out_fp);
+			break;
+		case 'A':
+			display_types_with_attributes(&policydb, out_fp);
 			break;
 		case 'u':
 			display_users(&policydb, out_fp);
