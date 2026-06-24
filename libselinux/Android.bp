@@ -299,6 +299,7 @@ rust_bindgen {
         "--allowlist-function=selinux_android_set_sehandle",
         "--allowlist-function=selinux_android_setcon",
         "--allowlist-function=selinux_android_setcontext",
+        "--allowlist-function=selinux_android_setcontext2",
         "--allowlist-function=selinux_android_vendor_service_context_handle",
         "--allowlist-function=selinux_check_access",
         "--allowlist-function=selinux_log_callback",
