@@ -19,7 +19,7 @@ static __thread char *prev_exec = UNSET;
 static __thread char *prev_fscreate = UNSET;
 static __thread char *prev_keycreate = UNSET;
 static __thread char *prev_sockcreate = UNSET;
-static __thread char *prev_selinux_flags = UNSET;
+static __thread char *prev_grapheneos_flags = UNSET;
 
 static pthread_once_t once = PTHREAD_ONCE_INIT;
 static pthread_key_t destructor_key;
@@ -283,7 +283,7 @@ all_selfattr_def(con, "current", prev_current)
     all_selfattr_def(fscreatecon, "fscreate", prev_fscreate)
     all_selfattr_def(sockcreatecon, "sockcreate", prev_sockcreate)
     all_selfattr_def(keycreatecon, "keycreate", prev_keycreate)
-    all_selfattr_def(selinux_flags, "selinux_flags", prev_selinux_flags)
+    all_selfattr_def(grapheneos_flags, "grapheneos_flags", prev_grapheneos_flags)
 
 int getpidcon_raw(pid_t pid, char **c)
 {

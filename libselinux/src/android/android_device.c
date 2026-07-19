@@ -98,7 +98,7 @@ int selinux_android_setcontext2(uid_t uid,
 			       bool isSystemServer,
 			       const char *seinfo,
 			       const char *pkgname,
-			       const uint64_t selinux_flags)
+			       const uint64_t grapheneos_flags)
 {
 	char *orig_ctx_str = NULL;
 	const char *ctx_str = NULL;
@@ -131,10 +131,10 @@ int selinux_android_setcontext2(uid_t uid,
 		goto err;
 
 	char buf_for_hex_uint64[17]; // up to 16 hex chars (64 / 4) + NUL
-	if (selinux_flags != 0) {
-		snprintf(buf_for_hex_uint64, sizeof buf_for_hex_uint64, "%" PRIx64 , selinux_flags);
+	if (grapheneos_flags != 0) {
+		snprintf(buf_for_hex_uint64, sizeof buf_for_hex_uint64, "%" PRIx64 , grapheneos_flags);
 
-		 rc = setselinux_flags(buf_for_hex_uint64);
+		rc = setgrapheneos_flags(buf_for_hex_uint64);
 		if (rc < 0)
 			goto err;
 	}
